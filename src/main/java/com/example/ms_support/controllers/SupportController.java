@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/support")
@@ -20,35 +19,42 @@ public class SupportController {
         this.supportService = supportService;
     }
 
-    // Créer une nouvelle question de support
-    @PostMapping("/questions")
-    public ResponseEntity<SupportQuestion> createSupportQuestion(@RequestBody SupportQuestion question) {
-        SupportQuestion createdQuestion = supportService.createSupportQuestion(question);
+    @PostMapping
+    public ResponseEntity<SupportQuestion> createQuestion(@RequestBody SupportQuestion question) {
+        SupportQuestion createdQuestion = supportService.createQuestion(question);
         return ResponseEntity.ok(createdQuestion);
     }
 
-    // Obtenir une question par ID
-    @GetMapping("/questions/{id}")
-    public ResponseEntity<SupportQuestion> getSupportQuestionById(@PathVariable Integer id) {
-        Optional<SupportQuestion> question = supportService.getSupportQuestionById(id);
-        return question.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    @GetMapping
+    public ResponseEntity<List<SupportQuestion>> getAllQuestions() {
+        List<SupportQuestion> questions = supportService.getAllQuestions();
+        return ResponseEntity.ok(questions);
     }
 
-    // Obtenir toutes les questions ouvertes
-    @GetMapping("/questions/open")
-    public ResponseEntity<List<SupportQuestion>> getOpenSupportQuestions() {
-        List<SupportQuestion> openQuestions = supportService.getOpenSupportQuestions();
-        return ResponseEntity.ok(openQuestions);
+    @GetMapping("/{id}")
+    public ResponseEntity<SupportQuestion> getQuestionById(@PathVariable Long id) {
+        return supportService.getQuestionById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    // Fermer une question de support
-    @PutMapping("/questions/{id}/close")
-    public ResponseEntity<SupportQuestion> closeSupportQuestion(@PathVariable Integer id) {
-        SupportQuestion closedQuestion = supportService.closeSupportQuestion(id);
-        if (closedQuestion != null) {
-            return ResponseEntity.ok(closedQuestion);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<SupportQuestion>> getQuestionsByUser(@PathVariable Long userId) {
+        List<SupportQuestion> questions = supportService.getQuestionsByUserId(userId);
+        return ResponseEntity.ok(questions);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<SupportQuestion> answerQuestion(
+            @PathVariable Long id, 
+            @RequestBody SupportQuestion updatedQuestion) {
+        return supportService.getQuestionById(id)
+                .map(existingQuestion -> {
+                    existingQuestion.setReponse(updatedQuestion.getReponse());
+                    existingQuestion.setStatus("answered");
+                    SupportQuestion updated = supportService.updateQuestion(existingQuestion);
+                    return ResponseEntity.ok(updated);
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 }

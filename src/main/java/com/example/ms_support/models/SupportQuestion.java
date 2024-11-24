@@ -16,10 +16,10 @@ public class SupportQuestion {
     private Long userId;
 
     @Column(length = 100, nullable = false)
-    private String subject;
+    private String question;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
-    private String description;
+    @Column(length = 100, nullable = true)
+    private String reponse;
 
     @Column(length = 100, nullable = false)
     private String status = "open";
@@ -41,20 +41,20 @@ public class SupportQuestion {
         this.userId = userId;
     }
 
-    public String getSubject() {
-        return subject;
+    public String getQuestion() {
+        return question;
     }
 
-    public void setSubject(String subject) {
-        this.subject = subject;
+    public void setQuestion(String question) {
+        this.question = question;
     }
 
-    public String getDescription() {
-        return description;
+    public String getReponse() {
+        return reponse;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setReponse(String reponse) {
+        this.reponse = reponse;
     }
 
     public String getStatus() {
