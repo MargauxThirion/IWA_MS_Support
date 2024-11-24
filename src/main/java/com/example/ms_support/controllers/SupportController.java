@@ -57,4 +57,10 @@ public class SupportController {
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/open")
+    public ResponseEntity<List<SupportQuestion>> getOpenQuestions() {
+        List<SupportQuestion> openQuestions = supportService.getOpenQuestions();
+        return ResponseEntity.ok(openQuestions);
+    }
 }

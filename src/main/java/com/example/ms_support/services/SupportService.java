@@ -42,4 +42,8 @@ public class SupportService {
     public SupportQuestion updateQuestion(SupportQuestion question) {
         return supportRepository.save(question);
     }
+
+    public List<SupportQuestion> getOpenQuestions() {
+        return supportRepository.findByStatus("open");
+    }
 }
