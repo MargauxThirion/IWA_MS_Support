@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface SupportQuestionRepository extends JpaRepository<SupportQuestion, Integer> {
+public interface SupportQuestionRepository extends JpaRepository<SupportQuestion, Long> {
 
     // Trouver les questions par utilisateur et statut
     List<SupportQuestion> findByUserIdAndStatus(Long userId, String status);

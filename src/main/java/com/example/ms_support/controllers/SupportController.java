@@ -63,4 +63,20 @@ public class SupportController {
         List<SupportQuestion> openQuestions = supportService.getOpenQuestions();
         return ResponseEntity.ok(openQuestions);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteQuestion(@PathVariable Long id) {
+        boolean isDeleted = supportService.deleteQuestion(id);
+        if (isDeleted) {
+            return ResponseEntity.noContent().build(); // Code 204 : Pas de contenu
+        } else {
+            return ResponseEntity.notFound().build(); // Code 404 : Ressource non trouvée
+        }
+    }
+
+    @GetMapping("/answered")
+    public ResponseEntity<List<SupportQuestion>> getAnsweredQuestions() {
+        List<SupportQuestion> answeredQuestions = supportService.getAnsweredQuestions();
+        return ResponseEntity.ok(answeredQuestions);
+    }
 }

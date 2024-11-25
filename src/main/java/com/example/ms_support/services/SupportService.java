@@ -30,7 +30,7 @@ public class SupportService {
 
     // Récupérer une question par ID
     public Optional<SupportQuestion> getQuestionById(Long id) {
-        return supportRepository.findById(id.intValue());
+        return supportRepository.findById(id);
     }
 
     // Récupérer les questions par utilisateur
@@ -46,4 +46,17 @@ public class SupportService {
     public List<SupportQuestion> getOpenQuestions() {
         return supportRepository.findByStatus("open");
     }
+
+    public boolean deleteQuestion(Long id) {
+        Optional<SupportQuestion> question = supportRepository.findById(id);
+        if (question.isPresent()) {
+            supportRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+    public List<SupportQuestion> getAnsweredQuestions() {
+        return supportRepository.findByStatus("answered");
+    }
+    
 }
